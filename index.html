@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+  body {
+  background-color: black;
+}
+
+   .pointscounter {
+     position: absolute;
+     left: 50%;
+     top: 5%;
+     height: 2%;
+     width: 2%;
+     color: white;
+     font-size: 50px;
+   }
+   .five, .one, .ten {
+     position: absolute;
+     top: 15%;
+     height: 7%;
+     width: 8%;
+     color: white;
+     text-align: contain;
+     background-color: #363636;
+     border-radius: 15px;
+     font-size: 15px;
+   }
+   .five {
+     left: 47.5%;
+   }
+   .one {
+     left: 37.5%;
+   }
+   .ten {
+     left: 57.5%;
+   }
+   .motox3m-button {
+     position: absolute;
+     display: flex;
+     align-items: center; /* Center the image and text vertically */
+     justify-content: center; /* Center the image and text horizontally, if needed */
+     width: 280px; /* Set the width of the button */
+     height: 180px; /* Set the height of the button */
+     background-color: blue;
+     color: black;
+     border: none;
+     border-radius: 5px;
+     font-size: 50px; /* Set the font size of the button */
+     cursor: pointer;
+     overflow: hidden; /* Hide the overflowing parts of the image */
+   }
+   .pointstext {
+    position: absolute;
+            left: 43%;
+            top: 3.5%;
+            width:  2%; /* Set the width of the button */
+            height: 2%; /* Set the height of the button */
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 50px; /* Set the font size of the button */
+            cursor: pointer;
+   }
+ </style>
+ <h1>yello</h1>
+</head>
+<body>
+ <h2 class="pointscounter" id="points">0</h2>
+ <p class="pointstext">Points:</p>
+ <button class="five" onclick="startQuiz(5)">Start 5 question Quiz</button>
+ <button class="one" onclick="startQuiz(1)">Start 1 question Quiz</button>
+ <button class="ten" onclick="startQuiz(10)">Start 10 question Quiz</button>
+ <script>
+   // Function to get points from localStorage
+   function getPoints() {
+     return parseInt(localStorage.getItem('points')) || 0;
+   }
+
+   // Function to save points to localStorage
+   function savePoints(points) {
+     localStorage.setItem('points', points);
+   }
+
+   // Function to create a new button
+   function createNewButton() {
+     const newButton = document.createElement('button');
+     newButton.innerHTML = 'Go to MotoX3M';
+     newButton.className = 'motox3m-button';
+     newButton.onclick = function() {
+       var points = getPoints();
+       points -= 10;
+       savePoints(points);
+       document.getElementById("points").innerHTML = points;
+       window.location.href = 'motox3m.html';
+     };
+     document.body.appendChild(newButton);
+   }
+
+   // Function to start the quiz
+   function startQuiz(numQuestions) {
+     var points = getPoints();
+     document.getElementById("points").innerHTML = points;
+
+     for (let i = 0; i < numQuestions; i++) {
+       const questions = [
+         { question: "8 x 8", answer: "64" },
+         { question: "7 x 9", answer: "63" },
+         { question: "6 x 6", answer: "36" },
+         { question: "5 x 5", answer: "25" },
+         { question: "3 x 6", answer: "18" },
+         { question: "write the equation in slope intercept form, M=2, intercept(0,-5)", answer: "y=2x-5" },
+         { question: "9 x 6", answer: "54" },
+         { question: "7 x 8", answer: "56" },
+         { question: "12 x 12", answer: "144" },
+         { question: "11 x 8", answer: "88" }
+       ];
+
+       function getRandomItem(arr) {
+         const randomIndex = Math.floor(Math.random() * arr.length);
+         return arr[randomIndex];
+       }
+
+       const randomElement = getRandomItem(questions);
+
+       var userAnswer = prompt(randomElement.question);
+
+       if (userAnswer === randomElement.answer) {
+         alert("Correct! +1 point");
+         points += 1;
+         document.getElementById("points").innerHTML = points;
+         savePoints(points); // Save points to localStorage
+       } else {
+         alert("Incorrect. The correct answer is " + randomElement.answer);
+       }
+     }
+
+     // Check if points are greater than or equal to 5
+     if (points >= 10) {
+       createNewButton();
+     }
+   }
+
+   // Initialize points display on page load
+   document.getElementById("points").innerHTML = getPoints();
+ </script>
+</body>
+</html>
